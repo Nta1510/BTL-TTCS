@@ -1,1 +1,13 @@
-x
+{% extends "base.html" %}
+{% block content %}
+  <h1>All Posts</h1>
+  <a href="{% url 'post_create' %}">+ New Post</a>
+  {% for post in posts %}
+    <div>
+      <h2><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2>
+      <p>by {{ post.author }} - {{ post.created_at }}</p>
+      <p>{{ post.content|truncatechars:100 }}</p>
+    </div>
+  {% endfor %}
+{% endblock %}
+
