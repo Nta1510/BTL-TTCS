@@ -1,1 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Inbox</h2>
+  <a href="{% url 'send_message' %}">Compose New Message</a> |
+  <a href="{% url 'sent_messages' %}">Sent Messages</a>
+  <ul>
+    {% for msg in messages %}
+      <li>
+        <a href="{% url 'message_detail' msg.pk %}">
+          <strong>{{ msg.subject }}</strong> from {{ msg.sender.username }}
+          {% if not msg.is_read %}<span style="color:red;">(new)</span>{% endif %}
+        </a>
+      </li>
+    {% empty %}
+      <li>No messages.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
 
