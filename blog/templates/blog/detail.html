@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ post.title }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: 20px auto; }
+    img { max-width: 100%; height: auto; }
+    .comments { margin-top: 30px; }
+    .comment { border-bottom: 1px solid #ddd; padding: 10px 0; }
+    .comment strong { color: #333; }
+    .comment time { color: #666; font-size: 0.9em; }
+    form { margin-top: 20px; }
+    .errorlist { color: red; list-style: none; padding-left: 0; }
+    .post-meta { color: #777; font-size: 0.9em; margin-bottom: 20px; }
+    .actions a { margin-right: 10px; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <h1>{{ post.title }}</h1>
+  <p class="post-meta">Đăng bởi <strong>{{ post.author }}</strong> lúc {{ post.created_at|date:"d/m/Y H:i" }}</p>
+
+  <p>{{ post.content }}</p>
+
+  {% if post.image %}
+    <img src="{{ post.image.url }}" alt="Ảnh bài viết" />
+  {% endif %}
+
+  <hr />
+
+  <section class="comments">
+    <h3>Bình luận</h3>
+
+    {% for comment in comments %}
+      <div class="comment">
+        <strong>{{ comment.user.username }}</strong> 
+        <time>{{ comment.created_at|date:"d/m/Y H:i" }}</time>
+        <p>{{ comment.content }}</p>
+      </div>
+    {% empty %}
+      <p>Chưa có bình luận nào.</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+      <h4>Viết bình luận:</h4>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if form.errors %}
+          <ul class="errorlist">
+            {% for field in form %}
+              {% for error in field.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        <button type="submit">Gửi</button>
+      </form>
+    {% else %}
+      <p><a href="{% url 'login' %}">Đăng nhập</a> để bình luận.</p>
+    {% endif %}
+  </section>
+
+  {% if user == post.author %}
+    <p class="actions">
+      <a href="{% url 'edit_post' post.id %}">✏️ Sửa</a>
+      <a href="{% url 'delete_post' post.id %}">🗑️ Xoá</a>
+    </p>
+  {% endif %}
+
+  <p><a href="{% url 'home' %}">← Quay về trang chủ</a></p>
+
+</body>
+</html>

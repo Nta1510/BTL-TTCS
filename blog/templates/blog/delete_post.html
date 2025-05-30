@@ -1,0 +1,7 @@
+<h2>Bạn có chắc chắn muốn xoá bài này?</h2>
+<p>{{ post.title }}</p>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Xoá</button>
+    <a href="{% url 'home' %}">Huỷ</a>
+</form>

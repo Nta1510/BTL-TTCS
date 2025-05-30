@@ -1,0 +1,14 @@
+<h1>📩 Hộp thư đến</h1>
+<ul>
+    {% for msg in messages %}
+        <li>
+            <strong>Từ:</strong> {{ msg.sender.username }} <br>
+            <strong>Nội dung:</strong> {{ msg.content }} <br>
+            <em>{{ msg.timestamp }}</em>
+        </li>
+        <hr>
+    {% empty %}
+        <p>Chưa có tin nhắn nào.</p>
+    {% endfor %}
+</ul>
+<a href="{% url 'send_message' %}">Gửi tin nhắn mới</a>
